@@ -1,25 +1,29 @@
 FORMAT: 1A
 HOST: https://v1.api.dudesolutions.io
 
+USECOMMONSDKLIBRARY: TRUE
 GENERATEASYNCCODE: TRUE
+GENERATEINTERFACES: TRUE
 USEMETHODPREFIX: TRUE
 USEMODELPOSTFIX: FALSE
 USECONTROLLERPOSTFIX: FALSE
 USEENUMPOSTFIX: FALSE
 USECONSTRUCTORSFORCONFIG: TRUE
-CSHARPDEFAULTNAMESPACE: DSI.SDK.<ApiName>
-JAVADEFAULTNAMESPACE: io.dudesolutions.<ApiName>
+CSHARPDEFAULTNAMESPACE: DSI.SDK.Event
+JAVADEFAULTNAMESPACE: io.dudesolutions.event
 BRANDLABEL: Dude Solutions, Inc.
 USERAGENT: Dude SDK
+NULLIFY404: TRUE
+VALIDATEREQUIREDPARAMETERS: FALSE
+COLLECTPARAMETERS: TRUE
 
+# Dude Inventory Api
 
 ## Reference
 Good reference document: https://raw.githubusercontent.com/apiaryio/api-blueprint/master/examples/Polls%20API.md
 
 ## Authentication
-*<Api Name>* uses OAuth v2 Authentication. First you create a new (or acquire existing) OAuth v2 token using [DudeAuth](https://www.dudeauth.com/).
-
-New to *OAuth*?  Check out the [OAuth Bible](http://oauthbible.com/) for good reference material.
+*[API Name]* uses OAuth v2 Authorization. First you create a new (or acquire existing) OAuth v2 token using [DudeAuth](https://www.dudeauth.com/).
 
 ## Media Types
 Where applicable this API uses the *JSON* media-type to represent resources.
@@ -27,7 +31,7 @@ Where applicable this API uses the *JSON* media-type to represent resources.
 Requests and responses with a message-body use plain JSON to set or update resources.
 
 ## Error States
-Common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used throughout this API.
+The common [HTTP Response Status Codes](https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md) are used throughout this API.
 
 In addition to standard response codes the response object returned from the server during an exception event may contain additional information in the following JSON format:
 
@@ -36,20 +40,15 @@ In addition to standard response codes the response object returned from the ser
             "dudeReferenceId": "3523845A-4729-4CCB-9E16-01DEADF6C2DF",
             "stackTrace": "Null, Typically"
         }
-        
-## Data Restriction
-Depending on the access level granted to the calling client certain data elements throughout this API will be removed and not returned.
 
-## Dates & Times
-All dates and times are represented in [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) format.  In addition, *<ApiName>* will always provide [Coordinated Universal Time](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
+# Group System Information
 
-The API is capable of parsing most date and time formats, however we do require UTC dates and times be provided from all calling systems.  We highly recommend you utilize the ISO-8601 standard when communicating dates and time to the API as well.
+## System Information [/]
 
-## Known Issues
-None at this time
+### GET
 
-## Documentation Notes
-In Progress
++ Response 200 (application/json)
+    + Attributes (System Information)
 
 # Group Heartbeat
 
@@ -59,19 +58,127 @@ Any response that does not provide a ```200 OK``` response code should be treate
 
 ### GET
 
-+ Response 200 (application/json)
++ Response 200 (application/json; charset=utf-8)
     + Headers
-    
+
             X-Dude-Api-Limit: Unlimited or Number
             X-Dude-Api-Remaining: Unlimited or Number
             X-Dude-Api-Server: Api Server ID
-            
+
     + Attributes (Heartbeat)
+
+
+# Group InventoryItem
+
+## InventoryItem Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby}]
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Base Collection Response)
+        + `data` (array[InventoryItem Data], required)
+
+## InventoryItem Create [/accounts/{accountId}/inventoryitems]
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+
+### POST
+
++ Request
+    + Attributes (Base InventoryItem Data)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (InventoryItem Data)
+
+## InventoryItem Detail [/accounts/{accountId}/inventoryitem/{id}]
+
++ Parameters
+    + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
+    + id: 1 (number, required) - {LONG} The ID of the inventoryItem
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (InventoryItem Data)
+
+### PUT
+
++ Request
+    + Attributes (Update InventoryItem Data)
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (InventoryItem Data)
+
+### DELETE
+
++ Response 204
 
 # Data Structures
 
+## System Information (object)
++ `application`: `Dude Inventory Api` (string, required) - The name of the application.
++ `version` : `1.0.0.0` (string, required) - The assembly version.
++ `apiVersion` : `1.0.0.0` (string, required) - The API version.
++ `vitals` (Heartbeat, required) - The state of the system dependencies.
++ `links` (array[System Links], required) - The API routes.
+
+## System Links (object)
++ `endpoint` : `Inventory` (string, required) - The name of the endpoint.
++ `action` : `Get` (string, required) - The REST action.
++ `route` : `/accounts/{accountId}/inventoryitems` (string, required) - The route to the endpoint.
+
 ## Heartbeat (object)
-Represents a heartbeat response.
++ `cachevitalcheck`: true (boolean, required) - Vital check to ensure something is online.
++ `eventdbvitalcheck`: true (boolean, required) - Vital check to ensure something is online.
+
+## Base Collection Response (object)
++ `page`: 1 (number, required) - {INT} The current page provided in the response data.
++ `pageSize`: 1000 (number, required) - {INT} The page size returned in the response data.
++ `dataSize` (number, required) - {INT} The total records returned in the response.
++ `total` (number, required) - {INT} The total number of records available in the collection.
+
+## Base Client Object (object)
++ `id`: 1234567890 (number, required) - {INT} The ID of the API client.
+
+## Recurrence Pattern (object)
++ `time`: `03:00:00` (string, optional) - The time of the recurrence
++ `dayOfMonth`: 24 (number, optional) - {INT} The day of the month that applies to the recurrence
++ `daysOfWeek` (array[number], optional) - {INT} The days of week that the recurrence applies to
++ `every`: 2 (number, optional) - {INT} How often it repeats
++ `month`: 12 (number, optional) - {INT} The month that the pattern recurs
++ `period`: `Day` (string, optional) - The period
++ `ordinal`: `1` (string, optional) - The integer value relating to an ordinal number (eg: 1 for 1st)
++ `startDateTime`: "2015-10-01T00:00:00Z" (string, optional) - {DATETIME} The date/time that the recurrence pattern starts
++ `endDateTime`: "2016-10-01T00:00:00Z" (string, optional) - {DATETIME} The date/time that the recurrence pattern terminates
++ `targetDateTime`: "2016-10-01T00:00:00Z" (string, optional) - {DATETIME} The target generation date for the recurrence pattern
++ `cronex`: "0 0 12 * * ?" (string, optional) - The cron expression. This is a system generated expression based on the recurrence pattern.
+
+## Base InventoryItem Data (object)
+Represents and item that can be stored in inventory
+
+###Properties
++ `id`: 1234567890 (number, required) - {LONG} The ID of the inventory item
++ `internalIdentifer`: `P/N 234234A` (string, required) - The unique identifier of the item as defined by customer
++ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
++ `isActive`: true (boolean, required) - Indicates if the inventory item is active
+
+## Update InventoryItem Data (Base InventoryItem Data)
++ `id`: 1234567890 (number, required) - {LONG} The ID for the object
+
+## InventoryItem Data (Update InventoryItem Data)
+
+## Base User (object)
+Represents a user with base properties.
 
 ### Properties
-+ `vitalCheck`: true (boolean, required) - Vital check to ensure something is online.
++ `id`: 1 (number, required) - {INT} The ID of the user.
++ `firstName`: John (string, required) - The first name of the user.
++ `lastName`: Smith (string, required) - The last name of the user.
++ `email`: john.smith@dudesolutions.io (string, required) - The email address of the user.
