@@ -70,13 +70,14 @@ Any response that does not provide a ```200 OK``` response code should be treate
 
 # Group InventoryItem
 
-## InventoryItem Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby}]
+## InventoryItem Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby,includeAudit}]
 
 + Parameters
     + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
     + page: 1 (number, optional) - {INT} The page to request from the collection.
     + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
     + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+    + includeAudit: true (boolean, optional) - Flag to return audit information from the api
 
 ### GET
 
@@ -84,24 +85,20 @@ Any response that does not provide a ```200 OK``` response code should be treate
     + Attributes (Base Collection Response)
         + `data` (array[InventoryItem Data], required)
 
-## InventoryItem Create [/accounts/{accountId}/inventoryitems]
-
-+ Parameters
-    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
-
 ### POST
 
 + Request
-    + Attributes (Base InventoryItem Data)
+    + Attributes (InventoryItem Create)
 
 + Response 201 (application/json; charset=utf-8)
     + Attributes (InventoryItem Data)
 
-## InventoryItem Detail [/accounts/{accountId}/inventoryitem/{id}]
+## InventoryItem Detail [/accounts/{accountId}/inventoryitem/{id}{?includeAudit}]
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
-    + id: 1 (number, required) - {LONG} The ID of the inventoryItem
+    + id: 1 (number, required) - {INT} The ID of the inventoryItem
+    + includeAudit: true (boolean, optional) - Flag to return audit information from the api
 
 ### GET
 
@@ -111,7 +108,7 @@ Any response that does not provide a ```200 OK``` response code should be treate
 ### PUT
 
 + Request
-    + Attributes (Update InventoryItem Data)
+    + Attributes (InventoryItem Update)
 
 + Response 200 (application/json; charset=utf-8)
     + Attributes (InventoryItem Data)
@@ -160,25 +157,25 @@ Any response that does not provide a ```200 OK``` response code should be treate
 + `targetDateTime`: "2016-10-01T00:00:00Z" (string, optional) - {DATETIME} The target generation date for the recurrence pattern
 + `cronex`: "0 0 12 * * ?" (string, optional) - The cron expression. This is a system generated expression based on the recurrence pattern.
 
-## Base InventoryItem Data (object)
-Represents and item that can be stored in inventory
-
-###Properties
-+ `id`: 1234567890 (number, required) - {LONG} The ID of the inventory item
-+ `internalIdentifer`: `P/N 234234A` (string, required) - The unique identifier of the item as defined by customer
+## InventoryItem Create (object)
++ `internalIdentifier`: `P/N 234234A` (string, required) - The unique identifier of the item as defined by customer
 + `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
 + `isActive`: true (boolean, required) - Indicates if the inventory item is active
 
-## Update InventoryItem Data (Base InventoryItem Data)
-+ `id`: 1234567890 (number, required) - {LONG} The ID for the object
+## InventoryItem Update (InventoryItem Create)
++ `id`: 1234567890 (number, required) - {INT} The ID for the object
 
-## InventoryItem Data (Update InventoryItem Data)
+## InventoryItem Data (InventoryItem Update)
++ `createdDateTime`: `2015-01-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the record was created.
++ `createdByUser` (Base User Object, optional) - Information about the user who created the record.
++ `createdByApiClient` (Base Client Object, optional) - Information about the client who created the record.
++ `updatedDateTime`: `2015-01-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the record was last updated.
++ `updatedByUser` (Base User Object, optional) - Information about the user who last modified the record.
++ `updatedByApiClient` (Base Client Object, optional) - Information about the client who last modified the record.
 
-## Base User (object)
-Represents a user with base properties.
-
-### Properties
+## Base User Object (object)
 + `id`: 1 (number, required) - {INT} The ID of the user.
 + `firstName`: John (string, required) - The first name of the user.
 + `lastName`: Smith (string, required) - The last name of the user.
 + `email`: john.smith@dudesolutions.io (string, required) - The email address of the user.
+
