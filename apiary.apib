@@ -71,6 +71,7 @@ Any response that does not provide a ```200 OK``` response code should be treate
 # Group Inventory Item
 
 ## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby}]
+This endpoint allows for the retrieval of a list of inventory items as well as the creation of new ones
 
 + Parameters
     + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
@@ -84,6 +85,10 @@ Any response that does not provide a ```200 OK``` response code should be treate
     + Attributes (Base Collection Response)
         + `data` (array[Inventory Item Update], required)
 
+
+## Request Create Inventory Item Detail [/notifications]
+This endpoint allows for the new inventory items to be created
+
 ### POST
 
 + Request
@@ -92,7 +97,8 @@ Any response that does not provide a ```200 OK``` response code should be treate
 + Response 201 (application/json; charset=utf-8)
     + Attributes (Inventory Item Update)
 
-## Inventory Item Detail [/accounts/{accountId}/inventoryitems/{id}]
+## Inventory Item Detail [/accounts/{accountId}/inventoryitems/{id}{?includeAudit}]
+This endpoint allows for the select, update, and delete of specific inventory items3
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
@@ -103,46 +109,70 @@ Any response that does not provide a ```200 OK``` response code should be treate
 + Response 200 (application/json; charset=utf-8)
     + Attributes (Inventory Item Update)
 
+
 ### PUT
 
 + Request
     + Attributes (Inventory Item Update)
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Inventory Item Data)
+    + Attributes (Inventory Item Update)
 
 ### DELETE
 
-+ Response 204 (application/json; charset=utf-8)
++ Response 204
 
 # Data Structures
 
 ## System Information (object)
+Represents the Inventory Api application name, version, etc. Returned in the heartbeat
+
+###Properties
 + `application`: `Dude Inventory Api` (string, required) - The name of the application.
 + `version` : `1.0.0.0` (string, required) - The assembly version.
 + `apiVersion` : `1.0.0.0` (string, required) - The API version.
 + `vitals` (Heartbeat, required) - The state of the system dependencies.
 + `links` (array[System Links], required) - The API routes.
 
+
 ## System Links (object)
+Array of links returned in the System Information
+
+###Properties
 + `endpoint` : `Inventory` (string, required) - The name of the endpoint.
 + `action` : `Get` (string, required) - The REST action.
 + `route` : `/accounts/{accountId}/inventoryitems` (string, required) - The route to the endpoint.
 
+
 ## Heartbeat (object)
+Represents the data returned by the heartbeat request
+
+###Properties
 + `cachevitalcheck`: true (boolean, required) - Vital check to ensure cache is available and online
 + `inventorydbvitalcheck`: true (boolean, required) - Vital check to ensure database is online.
 
+
 ## Base Collection Response (object)
+Represents the standard page, pagesize, etc. of the request when working against the collection
+
+###Properties
 + `page`: 1 (number, required) - {INT} The current page provided in the response data.
 + `pageSize`: 1000 (number, required) - {INT} The page size returned in the response data.
 + `dataSize` (number, required) - {INT} The total records returned in the response.
 + `total` (number, required) - {INT} The total number of records available in the collection.
 
+
 ## Inventory Item Data
-+ `internalIdentifier`: `P/N 234234A` (string, required) - The unique identifier of the inventory item as defined by customer
-+ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the inventory item
+Represents the inventory item data with all fields except the id which will be returned in the saved object
+
+###Properties
++ `internalIdentifier`: `P/N 234234A` (string, required) - The unique identifier of the item as defined by customer
++ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
 + `isActive`: true (boolean, required) - Indicates if the inventory item is active
 
+
 ## Inventory Item Update (Inventory Item Data)
+Represents the inventory item with all fields including the system generated id
+
+###Properties
 + `id`: 1234567890 (number, required) - {INT} The ID for the object
