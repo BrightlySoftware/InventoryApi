@@ -9,8 +9,8 @@ USEMODELPOSTFIX: FALSE
 USECONTROLLERPOSTFIX: FALSE
 USEENUMPOSTFIX: FALSE
 USECONSTRUCTORSFORCONFIG: TRUE
-CSHARPDEFAULTNAMESPACE: DSI.SDK.Event
-JAVADEFAULTNAMESPACE: io.dudesolutions.event
+CSHARPDEFAULTNAMESPACE: DSI.SDK.Inventory
+JAVADEFAULTNAMESPACE: io.dudesolutions.inventory
 BRANDLABEL: Dude Solutions, Inc.
 USERAGENT: Dude SDK
 NULLIFY404: TRUE
@@ -23,7 +23,7 @@ COLLECTPARAMETERS: TRUE
 Good reference document: https://raw.githubusercontent.com/apiaryio/api-blueprint/master/examples/Polls%20API.md
 
 ## Authentication
-*[API Name]* uses OAuth v2 Authorization. First you create a new (or acquire existing) OAuth v2 token using [DudeAuth](https://www.dudeauth.com/).
+Inventory Api uses OAuth v2 Authorization. First you create a new (or acquire existing) OAuth v2 token using [DudeAuth](https://www.dudeauth.com/).
 
 ## Media Types
 Where applicable this API uses the *JSON* media-type to represent resources.
@@ -68,50 +68,48 @@ Any response that does not provide a ```200 OK``` response code should be treate
     + Attributes (Heartbeat)
 
 
-# Group InventoryItem
+# Group Inventory Item
 
-## InventoryItem Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby,includeAudit}]
+## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?page,pagesize,orderby}]
 
 + Parameters
     + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
     + page: 1 (number, optional) - {INT} The page to request from the collection.
     + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
     + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
-    + includeAudit: true (boolean, optional) - Flag to return audit information from the api
 
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
     + Attributes (Base Collection Response)
-        + `data` (array[InventoryItem Update], required)
+        + `data` (array[Inventory Item Update], required)
 
 ### POST
 
 + Request
-    + Attributes (InventoryItem Data)
+    + Attributes (Inventory Item Data)
 
 + Response 201 (application/json; charset=utf-8)
-    + Attributes (InventoryItem Update)
+    + Attributes (Inventory Item Update)
 
-## InventoryItem Detail [/accounts/{accountId}/inventoryitems/{id}{?includeAudit}]
+## Inventory Item Detail [/accounts/{accountId}/inventoryitems/{id}]
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
-    + id: 1 (number, required) - {INT} The ID of the inventoryItem
-    + includeAudit: true (boolean, optional) - Flag to return audit information from the api
+    + id: 1 (number, required) - {INT} The ID of the Inventory Item
 
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (InventoryItem Update)
+    + Attributes (Inventory Item Update)
 
 ### PUT
 
 + Request
-    + Attributes (InventoryItem Update)
+    + Attributes (Inventory Item Update)
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (InventoryItem Update)
+    + Attributes (Inventory Item Update)
 
 ### DELETE
 
@@ -132,8 +130,8 @@ Any response that does not provide a ```200 OK``` response code should be treate
 + `route` : `/accounts/{accountId}/inventoryitems` (string, required) - The route to the endpoint.
 
 ## Heartbeat (object)
-+ `cachevitalcheck`: true (boolean, required) - Vital check to ensure something is online.
-+ `eventdbvitalcheck`: true (boolean, required) - Vital check to ensure something is online.
++ `cachevitalcheck`: true (boolean, required) - Vital check to ensure cache is available and online
++ `inventorydbvitalcheck`: true (boolean, required) - Vital check to ensure database is online.
 
 ## Base Collection Response (object)
 + `page`: 1 (number, required) - {INT} The current page provided in the response data.
@@ -141,29 +139,10 @@ Any response that does not provide a ```200 OK``` response code should be treate
 + `dataSize` (number, required) - {INT} The total records returned in the response.
 + `total` (number, required) - {INT} The total number of records available in the collection.
 
-## Base Client Object (object)
-+ `id`: 1234567890 (number, required) - {INT} The ID of the API client.
-
-## Recurrence Pattern (object)
-+ `time`: `03:00:00` (string, optional) - The time of the recurrence
-+ `dayOfMonth`: 24 (number, optional) - {INT} The day of the month that applies to the recurrence
-+ `daysOfWeek` (array[number], optional) - {INT} The days of week that the recurrence applies to
-+ `every`: 2 (number, optional) - {INT} How often it repeats
-+ `month`: 12 (number, optional) - {INT} The month that the pattern recurs
-+ `period`: `Day` (string, optional) - The period
-+ `ordinal`: `1` (string, optional) - The integer value relating to an ordinal number (eg: 1 for 1st)
-+ `startDateTime`: "2015-10-01T00:00:00Z" (string, optional) - {DATETIME} The date/time that the recurrence pattern starts
-+ `endDateTime`: "2016-10-01T00:00:00Z" (string, optional) - {DATETIME} The date/time that the recurrence pattern terminates
-+ `targetDateTime`: "2016-10-01T00:00:00Z" (string, optional) - {DATETIME} The target generation date for the recurrence pattern
-+ `cronex`: "0 0 12 * * ?" (string, optional) - The cron expression. This is a system generated expression based on the recurrence pattern.
-
-## InventoryItem Data
-+ `internalIdentifier`: `P/N 234234A` (string, required) - The unique identifier of the item as defined by customer
-+ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
+## Inventory Item Data
++ `internalIdentifier`: `P/N 234234A` (string, required) - The unique identifier of the inventory item as defined by customer
++ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the inventory item
 + `isActive`: true (boolean, required) - Indicates if the inventory item is active
 
-## InventoryItem Update (InventoryItem Data)
+## Inventory Item Update (Inventory Item Data)
 + `id`: 1234567890 (number, required) - {INT} The ID for the object
-
-
-
