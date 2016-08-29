@@ -47,7 +47,7 @@ In addition to standard response codes the response object returned from the ser
 
 ### GET
 
-+ Response 200 (application/json)
++ Response 200 (application/json; charset=utf-8)
     + Attributes (System Information)
 
 # Group Heartbeat
@@ -109,11 +109,11 @@ Any response that does not provide a ```200 OK``` response code should be treate
     + Attributes (Inventory Item Update)
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Inventory Item Update)
+    + Attributes (Inventory Item Data)
 
 ### DELETE
 
-+ Response 204
++ Response 204 (application/json; charset=utf-8)
 
 # Data Structures
 
