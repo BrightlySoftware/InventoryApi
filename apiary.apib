@@ -85,10 +85,6 @@ This endpoint allows for the retrieval of a list of inventory items as well as t
     + Attributes (Base Collection Response)
         + `data` (array[Inventory Item Manufacturer], required)
 
-
-## Request Create Inventory Item Detail [/accounts/{accountId}/inventoryitems]
-This endpoint allows for the new inventory items to be created
-
 ### POST
 
 + Request
@@ -124,18 +120,21 @@ This endpoint allows for the select, update, and delete of specific inventory it
 
 # Group Manufacturer
 
-## Manufacturer Collection [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers]
+## Manufacturer Collection [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers{?page,pagesize,orderby}]
 This endpoint allows for the retrieval of a list of manufacturers associated with a specific inventory item
 
 + Parameters
     + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
     + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
 
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes ()
-        + `data` (array[Manufacturer Update], required)
+    + Attributes (Base Collection Response)
+        + `data` (array[Manufacturer Data], required)
 
 ### POST
 
@@ -143,31 +142,31 @@ This endpoint allows for the retrieval of a list of manufacturers associated wit
     + Attributes (Manufacturer Data)
 
 + Response 201 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Update)
+    + Attributes (Manufacturer Data)
 
-## Manufacturer Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers/{coreId}]
+## Manufacturer Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers/{id}]
 This endpoint allows for the select, update, and delete of the association of a manufacturer to an inventory item.
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
     + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
-    + coreId: 1234 (number, required) - {INT} The ID of the manufacturer in the Dude Unified database
+    + id: 1234 (number, required) - {INT} The ID of the manufacturer in the Dude Unified database
 
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Update)
+    + Attributes (Manufacturer Data)
 
 ### PUT
 
 + Request
-    + Attributes (Manufacturer Update)
+    + Attributes (Manufacturer Data)
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Update)
+    + Attributes (Manufacturer Data)
 
 ### DELETE
-Delete only removes the association between the inventory item and the manufacturer. It does not delete the manufacturer.
+Delete only removes the association between the inventory item and the manufacturer, as well as any part numbers. It does not delete the manufacturer.
 
 + Response 204
 
@@ -238,33 +237,12 @@ Represents the inventory item with all fields including the ID for the object an
 The base object which represents a manufacturer associated with an inventory item. Not used stand alone, but rather with either a Part Number Data or Update
 
 ###Properties
-+ `id`: 1 (number, required) - {INT} The ID of the manufacturer. Null if manufacturer does not exist in Unified.
-+ `name`: Ford (string, required) - The name of the manufacturer.
-+ `isDudeManufacturer`: true (boolean) - Indicates if this is a common platform manufacturer.
++ `id`: 1 (number, required) - {INT} The ID of the manufacturer.
 
 
 ## Manufacturer Data (Manufacturer Base)
 Represents a manufacturer associated with an inventory item. This does not include the id of the part number, and is used to POST.
 
 ###Properties
-+ `partNumbers` (array[Part Number Data], optional) - An array of the part numbers for this manufacturer associated with the specific inventory item.
-
-
-## Manufacturer Update (Manufacturer Base)
-Represents a manufacturer associated with an inventory item. This contains the id of the part number, and is used to PUT and is returned with GET.
-
-###Properties
-+ `partNumbers` (array[Part Number Update], optional) - An array of the part numbers for this manufacturer associated with the specific inventory item.
-
-
-## Part Number Data (object)
-Represents a single part number for an inventory item. Does not include the id.
-
-###Properties
-+ `value`: `D7156AS` (string, optional) - The part number for an inventory item specific to this manufacturer.
-
-## Part Number Update (Part Number Data)
-Represents a single part number for an inventory item. Includes the id.
-
-###Properties
-+ `id`: 123456 (number, required) - {INT} The id for the part number.
++ `partNumbers` (array, optional) - An array of the part numbers for this manufacturer associated with the specific inventory item.
+  + `23423AB` (string)
