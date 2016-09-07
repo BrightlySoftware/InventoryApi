@@ -6,7 +6,7 @@
     <version>$version$</version>
     <authors>Dude Solutions, Inc.</authors>
     <owners>Dude Solutions, Inc.</owners>
-    <copyright>Copyright © 2015 Dude Solutions, Inc. - All Rights Reserved</copyright>
+    <copyright>Copyright ï¿½ 2015 Dude Solutions, Inc. - All Rights Reserved</copyright>
      <projectUrl>https://github.com/DudeSolutions/DudeInventoryApi</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Auto Generated Inventory API SDK</description>
@@ -17,9 +17,9 @@
 		  <dependency id="Microsoft.Bcl" version="1.1.10" />
 		  <dependency id="Microsoft.Bcl.Build" version="1.0.21" />
 		  <dependency id="Microsoft.Net.Http" version="2.2.29" />
-		  <dependency id="Newtonsoft.Json" version="7.0.1" />
+		  <dependency id="Newtonsoft.Json" version="9.0.1" />
 		  <dependency id="Microsoft.Bcl.Async" version="1.0.168" />
-		  <dependency id="Unirest-APIMATIC" version="1.0.1.24" />
+		  <dependency id="Unirest-APIMATIC" version="1.0.1.26" />
 		  <dependency id="APIMATIC.SDK.Common" version="1.0.1.39" />
       </group>
     </dependencies>
