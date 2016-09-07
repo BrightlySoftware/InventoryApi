@@ -144,13 +144,13 @@ This endpoint allows for the retrieval of a list of manufacturers associated wit
 + Response 201 (application/json; charset=utf-8)
     + Attributes (Manufacturer Data)
 
-## Manufacturer Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers/{id}]
+## Manufacturer Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers/{manufacturerId}]
 This endpoint allows for the select, update, and delete of the association of a manufacturer to an inventory item.
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
     + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
-    + id: 1234 (number, required) - {INT} The ID of the manufacturer in the Dude Unified database
+    + manufacturerId: 1234 (number, required) - {INT} The ID of the manufacturer in the Dude Unified database
 
 ### GET
 
@@ -237,7 +237,7 @@ Represents the inventory item with all fields including the ID for the object an
 The base object which represents a manufacturer associated with an inventory item. Not used stand alone, but rather with either a Part Number Data or Update
 
 ###Properties
-+ `id`: 1 (number, required) - {INT} The ID of the manufacturer.
++ `manufacturerId`: 1 (number, required) - {INT} The ID of the manufacturer.
 
 
 ## Manufacturer Data (Manufacturer Base)
