@@ -87,7 +87,7 @@ This endpoint allows for the retrieval of a list of inventory items as well as t
 
 + Response 200 (application/json; charset=utf-8)
     + Attributes (Base Collection Response)
-        + `data` (array[Inventory Item Manufacturer], required)
+        + `data` (array[Inventory Item Associations], required)
 
 ### POST
 
@@ -107,7 +107,7 @@ This endpoint allows for the select, update, and delete of specific inventory it
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Inventory Item Manufacturer)
+    + Attributes (Inventory Item Associations)
 
 
 ### PUT
@@ -138,15 +138,15 @@ This endpoint allows for the retrieval of a list of manufacturers associated wit
 
 + Response 200 (application/json; charset=utf-8)
     + Attributes (Base Collection Response)
-        + `data` (array[Manufacturer Data], required)
+        + `data` (array[Manufacturer], required)
 
 ### POST
 
 + Request
-    + Attributes (Manufacturer Data)
+    + Attributes (Manufacturer)
 
 + Response 201 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Data)
+    + Attributes (Manufacturer)
 
 ## Manufacturer Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/manufacturers/{manufacturerId}]
 This endpoint allows for the select, update, and delete of the association of a manufacturer to an inventory item.
@@ -159,18 +159,70 @@ This endpoint allows for the select, update, and delete of the association of a 
 ### GET
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Data)
+    + Attributes (Manufacturer)
 
 ### PUT
 
 + Request
-    + Attributes (Manufacturer Data)
+    + Attributes (Manufacturer)
 
 + Response 200 (application/json; charset=utf-8)
-    + Attributes (Manufacturer Data)
+    + Attributes (Manufacturer)
 
 ### DELETE
 Delete only removes the association between the inventory item and the manufacturer, as well as any part numbers. It does not delete the manufacturer.
+
++ Response 204
+
+# Group Supplier
+
+## Supplier Collection [/accounts/{accountId}/inventoryitems/{inventoryItemId}/suppliers{?page,pagesize,orderby}]
+This endpoint allows for the retrieval of a list of suppliers associated with a specific inventory item
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+    + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Base Collection Response)
+        + `data` (array[Supplier], required)
+
+### POST
+
++ Request
+    + Attributes (Supplier)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Supplier)
+
+## Supplier Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/suppliers/{supplierId}]
+This endpoint allows for the select, update, and delete of the association of a supplier to an inventory item.
+
++ Parameters
+    + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
+    + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
+    + supplierId: 1234 (number, required) - {INT} The ID of the supplier in the Dude Unified database
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Supplier)
+
+### PUT
+
++ Request
+    + Attributes (Supplier)
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Supplier)
+
+### DELETE
+Delete only removes the association between the inventory item and the supplier, as well as any part numbers. It does not delete the supplier.
 
 + Response 204
 
@@ -214,7 +266,7 @@ Represents the standard page, pagesize, etc. of the request when working against
 + `total` (number, required) - {INT} The total number of records available in the collection.
 
 
-## Inventory Item Data
+## Inventory Item Data (object)
 Represents the inventory item data with all fields except the id which will be returned in the saved object
 
 ###Properties
@@ -230,23 +282,27 @@ Represents the inventory item with all fields including the system generated id
 + `id`: 1234567890 (number, required) - {INT} The ID for the object
 
 
-## Inventory Item Manufacturer (Inventory Item Update)
-Represents the inventory item with all fields including the ID for the object and a count of the associated manufacturers.
+## Inventory Item Associations (Inventory Item Update)
+Represents the inventory item with all fields including the count of the associated manufacturers and suppliers.
 
 ### Properties
 + `manufacturerCount`: 1 (number, required) - {INT} The number of manufacturers associated with the inventory item.
++ `supplierCount` : 1 (number, required) - {INT} The number of suppliers associated with the inventory item.
 
 
-## Manufacturer Base (object)
-The base object which represents a manufacturer associated with an inventory item. Not used stand alone, but rather with either a Part Number Data or Update
+## Manufacturer (object)
+Represents a manufacturer associated with an inventory item.
 
 ###Properties
 + `manufacturerId`: 1 (number, required) - {INT} The ID of the manufacturer.
++ `partNumbers` (array, optional) - An array of the part numbers for this manufacturer associated with the specific inventory item.
+  + `23423AB` (string)
 
 
-## Manufacturer Data (Manufacturer Base)
-Represents a manufacturer associated with an inventory item. This does not include the id of the part number, and is used to POST.
+## Supplier (object)
+Represents a supplier associated with an inventory item.
 
 ###Properties
-+ `partNumbers` (array, optional) - An array of the part numbers for this manufacturer associated with the specific inventory item.
++ `supplierId`: 1 (number, required) - {INT} The ID of the supplier.
++ `partNumbers` (array, optional) - An array of the part numbers for this supplier associated with the specific inventory item.
   + `23423AB` (string)
