@@ -70,7 +70,7 @@ Any response that does not provide a ```200 OK``` response code should be treate
 
 # Group Inventory Item
 
-## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?q,isActive,manufacturerIds,manufacturerPartNumbers,supplierIds,supplierPartNumbers,page,pagesize,orderby}]
+## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?q,isActive,manufacturerIds,manufacturerPartNumbers,supplierIds,supplierPartNumbers,businessAssetIds,includeDescendants,page,pagesize,orderby}]
 This endpoint allows for the retrieval of a list of inventory items as well as the creation of new ones
 
 + Parameters
@@ -81,6 +81,8 @@ This endpoint allows for the retrieval of a list of inventory items as well as t
     + manufacturerPartNumbers: `RES-100-0003` (array[string], optional) - Filter inventory items using the part number of the item, specific to manufacturer. Partial matches are allowed.
     + supplierIds: 1 (array[number], optional) - {INT} Filter inventory items using the ID of the supplier as an integer.
     + supplierPartNumbers: `ABC-100-0003` (array[string], optional) - Filter inventory items using the part number of the item, specific to supplier. Partial matches are allowed.
+    + businessAssetIds: 1 (array[number], optional) - {LONG} Filter inventory items using the ID of the business asset id of the storage location. Send business asset id null to return unassigned inventory items.
+    + includeDescendants: false (boolean, optional) - Flag to include inventory items assigned to the descendants of the specified business asset ids of the storage locations.
     + page: 1 (number, optional) - {INT} The page to request from the collection.
     + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
     + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
@@ -260,7 +262,7 @@ This endpoint allows for the select, update, and delete of the association of a 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
     + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
-    + businessAssetId: 1234 (number, required) - {INT} The ID of the business asset in the Dude Unified database that is the storage area
+    + businessAssetId: 1234 (number, required) - {LONG} The ID of the business asset in the Dude Unified database that is the storage area
 
 ### GET
 
@@ -367,4 +369,4 @@ Represents a supplier associated with an inventory item.
 Represents a storage area associated with an inventory item.
 
 ###Properties
-+ `businessAssetId`: 1 (number, required) - {INT} The ID of the business asset that represents the storage area.
++ `businessAssetId`: 1 (number, required) - {LONG} The ID of the business asset that represents the storage area.
