@@ -228,6 +228,58 @@ Delete only removes the association between the inventory item and the supplier,
 
 + Response 204
 
+# Group Storage Areas
+
+## Storage Area Collection [/accounts/{accountId}/inventoryitems/{inventoryItemId}/storageAreas{?page,pagesize,orderby}]
+This endpoint allows for the retrieval of a list of storage areas associated with a specific inventory item
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+    + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Base Collection Response)
+        + `data` (array[Storage Area], required)
+
+### POST
+
++ Request
+    + Attributes (Storage Area)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Storage Area)
+
+## Storage Area Detail [/accounts/{accountId}/inventoryitems/{inventoryItemId}/storageAreas/{businessAssetId}]
+This endpoint allows for the select, update, and delete of the association of a storage area to an inventory item.
+
++ Parameters
+    + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
+    + inventoryItemId: 1 (number, required) - {INT} The ID of the Inventory Item
+    + businessAssetId: 1234 (number, required) - {INT} The ID of the business asset in the Dude Unified database that is the storage area
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Storage Area)
+
+### PUT
+
++ Request
+    + Attributes (Storage Area)
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Storage Area)
+
+### DELETE
+Delete only removes the association between the inventory item and the storage area. It does not delete the business asset.
+
++ Response 204
+
 # Data Structures
 
 ## System Information (object)
@@ -289,7 +341,8 @@ Represents the inventory item with all fields including the count of the associa
 
 ### Properties
 + `manufacturerCount`: 1 (number, required) - {INT} The number of manufacturers associated with the inventory item.
-+ `supplierCount` : 1 (number, required) - {INT} The number of suppliers associated with the inventory item.
++ `supplierCount`: 1 (number, required) - {INT} The number of suppliers associated with the inventory item.
++ `storageAreaCount`: 1 (number, required) - {INT} The number of storage areas associated with the inventory item.
 
 
 ## Manufacturer (object)
@@ -308,3 +361,10 @@ Represents a supplier associated with an inventory item.
 + `supplierId`: 1 (number, required) - {INT} The ID of the supplier.
 + `partNumbers` (array, optional) - An array of the part numbers for this supplier associated with the specific inventory item.
   + `23423AB` (string)
+
+
+## Storage Area (object)
+Represents a storage area associated with an inventory item.
+
+###Properties
++ `businessAssetId`: 1 (number, required) - {INT} The ID of the business asset that represents the storage area.
