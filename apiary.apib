@@ -16,6 +16,7 @@ USERAGENT: Dude SDK
 NULLIFY404: TRUE
 VALIDATEREQUIREDPARAMETERS: FALSE
 COLLECTPARAMETERS: TRUE
+ARRAYSERIALIZATION: Plain
 
 # Dude Inventory Api
 
@@ -70,22 +71,24 @@ Any response that does not provide a ```200 OK``` response code should be treate
 
 # Group Inventory Item
 
-## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?q,isActive,manufacturerIds,manufacturerPartNumbers,supplierIds,supplierPartNumbers,businessAssetIds,includeDescendants,page,pagesize,orderby}]
+## Inventory Item Collection [/accounts/{accountId}/inventoryitems{?q,isActive,manufacturerIds,manufacturerPartNumbers,supplierIds,supplierPartNumbers,businessAssetIds,includeDescendants,hasQuantityOnHand,page,pagesize,orderby,includeAudit}]
 This endpoint allows for the retrieval of a list of inventory items as well as the creation of new ones
 
 + Parameters
     + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
     + q: `P/N 234234A` (string, optional) - Custom query object. Searches name and description fields.
     + isActive: true (boolean, optional) - Filter inventory items by active or inactive status.
-    + manufacturerIds: 1 (array[number], optional) - {INT} Filter inventory items using the ID of the manufacturer as an integer.
+    + manufacturerIds: 1 (number, optional) - {ARRAY} {INT} Filter inventory items using the ID of the manufacturer as an integer.
     + manufacturerPartNumbers: `RES-100-0003` (array[string], optional) - Filter inventory items using the part number of the item, specific to manufacturer. Partial matches are allowed.
-    + supplierIds: 1 (array[number], optional) - {INT} Filter inventory items using the ID of the supplier as an integer.
+    + supplierIds: 1 (number, optional) - {ARRAY} {INT} Filter inventory items using the ID of the supplier as an integer.
     + supplierPartNumbers: `ABC-100-0003` (array[string], optional) - Filter inventory items using the part number of the item, specific to supplier. Partial matches are allowed.
-    + businessAssetIds: 1 (array[number], optional) - {LONG} Filter inventory items using the ID of the business asset id of the storage location. Send business asset id null to return unassigned inventory items.
+    + businessAssetIds: 1 (number, optional) - {ARRAY} {LONG} Filter inventory items using the ID of the business asset id of the storage location. Send business asset id null to return unassigned inventory items.
     + includeDescendants: false (boolean, optional) - Flag to include inventory items assigned to the descendants of the specified business asset ids of the storage locations.
+    + hasQuantityOnHand: false (boolean, optional) - Flag to only include inventory items with quantity on hand
     + page: 1 (number, optional) - {INT} The page to request from the collection.
     + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
     + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+    + includeAudit: false (boolean, optional) - Flag to return audit information from the api
 
 ### GET
 
@@ -101,12 +104,13 @@ This endpoint allows for the retrieval of a list of inventory items as well as t
 + Response 201 (application/json; charset=utf-8)
     + Attributes (Inventory Item Update)
 
-## Inventory Item Detail [/accounts/{accountId}/inventoryitems/{id}]
+## Inventory Item Detail [/accounts/{accountId}/inventoryitems/{id}{?includeAudit}]
 This endpoint allows for the select, update, and delete of specific inventory items
 
 + Parameters
     + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
     + id: 1 (number, required) - {INT} The ID of the Inventory Item
+    + includeAudit: false (boolean, optional) - Flag to return audit information from the api
 
 ### GET
 
@@ -282,6 +286,71 @@ Delete only removes the association between the inventory item and the storage a
 
 + Response 204
 
+# Group Inventory Transaction Reasons
+
+## Inventory Transaction Reason Collection [/accounts/{accountId}/inventoryTransactionReasons{?page,pagesize,orderby}]
+This endpoint allows for the retrieval of a list of inventory transaction reasons.
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Base Collection Response)
+        + `data` (array[Inventory Transaction Reason], required)
+
+# Group Inventory Transactions
+
+## Inventory Transaction Collection [/accounts/{accountId}/inventoryTransactions{?q,inventoryItemId,businessAssetIds,includeDescendants,page,pagesize,orderby,includeAudit,reasonIds,dateFrom,dateTo,userIds}]
+This endpoint allows for the retrieval of a list of inventory transactions and the creation of new inventory transaction.
+
++ Parameters
+    + accountId: 2 (required, number) - {INT} ID of the account in the form of an integer
+    + q: `P/N 234234A` (string, optional) - Custom query object. Searches inventory name, description, and notes fields.
+    + inventoryItemId: 1 (number, optional) - {INT} The ID of the Inventory Item
+    + businessAssetIds: 1234 (number, optional) - {ARRAY} {LONG} The IDs of the business assets in the Dude Unified database that are the storage areas affected by the transaction.
+    + includeDescendants: false (boolean, optional) - Flag to include inventory transactions assigned to the descendants of the specified business asset ids of the storage locations.
+    + page: 1 (number, optional) - {INT} The page to request from the collection.
+    + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
+    + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
+    + includeAudit: true (boolean, optional) - Flag to return audit information from the api.
+    + reasonIds: 1234 (number, optional) - {ARRAY} {INT} The IDs in the Dude Unified database that represent the transaction reasons to filter on.
+    + dateFrom: `2017-02-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the transaction was created.
+    + dateTo: `2017-02-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the transaction was created.
+    + userIds: 1234 (number, optional) - {ARRAY} {INT} The User IDs in the Dude Security database that represent the userIds that performed the transaction
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Base Collection Response)
+        + `data` (array[Inventory Transaction Response], required)
+
+### POST
+
++ Request
+    + Attributes (Inventory Transaction)
+
++ Response 201 (application/json; charset=utf-8)
+    + Attributes (Inventory Transaction Response)
+
+## Inventory Transaction Detail [/accounts/{accountId}/inventoryTransactions/{inventoryTransactionId}{?includeAudit}]
+This endpoint allows for the selection of an inventory transaction.
+
++ Parameters
+    + accountId: 2 (number, required) - {INT} ID of the account in the form of an integer
+    + inventoryTransactionId: 1234 (number, required) - {INT} The ID of the inventory transaction
+    + includeAudit: true (boolean, optional) - Flag to return audit information from the api
+
+### GET
+
++ Response 200 (application/json; charset=utf-8)
+    + Attributes (Inventory Transaction Response)
+
+
 # Data Structures
 
 ## System Information (object)
@@ -322,6 +391,29 @@ Represents the standard page, pagesize, etc. of the request when working against
 + `total` (number, required) - {INT} The total number of records available in the collection.
 
 
+## Base User Object (object)
++ `id`: 1 (number, required) - {INT} The ID of the user.
++ `firstName`: John (string, required) - The first name of the user.
++ `lastName`: Smith (string, required) - The last name of the user.
++ `email`: john.smith@dudesolutions.io (string, required) - The email address of the user.
+
+## Base Client Object (object)
++ `id`: 1 (number, required) - {INT} The ID of the API client.
+
+
+## Inventory Item For Transaction (object)
+Represents an inventory item model used in a transaction, which adjusts which fields are required when posting a transaction.
+
+###Properties
++ `id`: 1234567890 (number, required) - {INT} The ID for the object
++ `name`: `P/N 234234A` (string, optional) - The unique name of the item as defined by customer
++ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
++ `isActive`: true (boolean, optional) - Indicates if the inventory item is active
++ `manufacturerCount`: 1 (number, optional) - {INT} The number of manufacturers associated with the inventory item.
++ `supplierCount`: 1 (number, optional) - {INT} The number of suppliers associated with the inventory item.
++ `storageAreaCount`: 1 (number, optional) - {INT} The number of storage areas associated with the inventory item.
+
+
 ## Inventory Item Data (object)
 Represents the inventory item data with all fields except the id which will be returned in the saved object
 
@@ -345,6 +437,7 @@ Represents the inventory item with all fields including the count of the associa
 + `manufacturerCount`: 1 (number, required) - {INT} The number of manufacturers associated with the inventory item.
 + `supplierCount`: 1 (number, required) - {INT} The number of suppliers associated with the inventory item.
 + `storageAreaCount`: 1 (number, required) - {INT} The number of storage areas associated with the inventory item.
++ `availableQuantity`: 1 (number, required) - {INT} The amount of total of the inventory storage areas for the inventory item
 
 
 ## Manufacturer (object)
@@ -370,3 +463,49 @@ Represents a storage area associated with an inventory item.
 
 ###Properties
 + `businessAssetId`: 1 (number, required) - {LONG} The ID of the business asset that represents the storage area.
++ `availableQuantity`: 1 (number, optional) - {INT} The amount of inventory available at this storage area
+
+
+## Inventory Transaction Type (object)
+Represents a type of inventory transaction - Adjustment, Movement, Receipt, and Issue.
+
+### Properties
++ `id`: 1234567890 (number, optional) - {INT} The ID for the inventory transaction type object.
++ `name`: `Adjustment` (string, optional) - The unique name of the inventory transaction type.
+
+## Inventory Transaction Reason (object)
+
+### Properties
++ `id`: 1234567890 (number, required) - {INT} The ID for the inventory transaction reason object.
++ `name`: `Adjustment` (string, optional) - The unique name of the inventory transaction reason.
++ `inventoryTransactionType` (Inventory Transaction Type, optional) - The type of transaction reason.
++ `isDudeReason`: true (boolean, optional) - Whether or not the transaction reason is a dude reason.
+
+## Inventory Transaction (object)
+
+### Properties
++ `inventoryItem` (Inventory Item For Transaction, required) - The inventory item associated with this transaction.
++ `inventoryTransactionReason` (Inventory Transaction Reason, required) - The reason for this transaction.
++ `transactionDateTime`: `2015-01-01T00:00:00.123Z` (string, required) - {DATETIME} The date and time in ISO-8601 format the transaction was performed.
++ `transactionUserId`: 123 (number, optional) - {INT} Id of the user who performed the transaction.
++ `notes`: `Some bolts were missing from the box.` (string, optional) - Notes about the transaction.
++ `inventoryTransactionDetails` (array[Inventory Transaction Details], required) - The additional details associated with an adjustment type of transaction.
+
+## Inventory Transaction Details (object)
+Represents adjustment transaction details.
+
+### Properties
++ `businessAssetId`: 1 (number, required) - {LONG} The ID of the business asset that represents the storage area.
++ `transactionQuantity`: 10 (number, required) - {INT} - The change in quantity.
+
+## Inventory Transaction Response (Inventory Transaction)
+Represents an inventory transaction with audit fields and id included
+
+### Properties
++ `id`: 1234567890 (number, required) - {INT} The ID for the transaction object.
++ `createdDateTime`: `2015-01-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the record was created.
++ `createdByUser` (Base User Object, optional) - Information about the user who created the record.
++ `createdByApiClient` (Base Client Object, optional) - Information about the client who created the record.
++ `updatedDateTime`: `2015-01-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the record was last updated.
++ `updatedByUser` (Base User Object, optional) - Information about the user who last modified the record.
++ `updatedByApiClient` (Base Client Object, optional) - Information about the client who last modified the record.
