@@ -412,6 +412,7 @@ Represents an inventory item model used in a transaction, which adjusts which fi
 + `manufacturerCount`: 1 (number, optional) - {INT} The number of manufacturers associated with the inventory item.
 + `supplierCount`: 1 (number, optional) - {INT} The number of suppliers associated with the inventory item.
 + `storageAreaCount`: 1 (number, optional) - {INT} The number of storage areas associated with the inventory item.
++ `unitOfIssue`: foot (string, required) - {INT} The unit key of the unit of measure
 
 
 ## Inventory Item Data (object)
@@ -421,6 +422,7 @@ Represents the inventory item data with all fields except the id which will be r
 + `name`: `P/N 234234A` (string, required) - The unique name of the item as defined by customer
 + `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
 + `isActive`: true (boolean, required) - Indicates if the inventory item is active
++ `unitOfIssue`: foot (string, required) - The unit key of the unit of measure
 
 
 ## Inventory Item Update (Inventory Item Data)
@@ -438,6 +440,7 @@ Represents the inventory item with all fields including the count of the associa
 + `supplierCount`: 1 (number, required) - {INT} The number of suppliers associated with the inventory item.
 + `storageAreaCount`: 1 (number, required) - {INT} The number of storage areas associated with the inventory item.
 + `availableQuantity`: 1 (number, required) - {INT} The amount of total of the inventory storage areas for the inventory item
++ `unitOfIssue`: foot (string, required) - The unit key of the unit of measure
 
 
 ## Manufacturer (object)
