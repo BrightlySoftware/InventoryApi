@@ -305,7 +305,7 @@ This endpoint allows for the retrieval of a list of inventory transaction reason
 
 # Group Inventory Transactions
 
-## Inventory Transaction Collection [/accounts/{accountId}/inventoryTransactions{?q,inventoryItemId,businessAssetIds,includeDescendants,page,pagesize,orderby,includeAudit,reasonIds,dateFrom,dateTo,userIds}]
+## Inventory Transaction Collection [/accounts/{accountId}/inventoryTransactions{?q,inventoryItemId,businessAssetIds,includeDescendants,page,pagesize,orderby,includeAudit,reasonIds,dateFrom,dateTo,userIds,workOrderDisplayIds}]
 This endpoint allows for the retrieval of a list of inventory transactions and the creation of new inventory transaction.
 
 + Parameters
@@ -318,10 +318,11 @@ This endpoint allows for the retrieval of a list of inventory transactions and t
     + pagesize: 1000 (number, optional) - {INT} The number of records to load in a page from the collection.
     + orderby: Id desc (string, optional) - A string describing the ordering to perform on the collection.
     + includeAudit: true (boolean, optional) - Flag to return audit information from the api.
-    + reasonIds: 1234 (number, optional) - {ARRAY} {INT} The IDs in the Dude Unified database that represent the transaction reasons to filter on.
+    + reasonIds: 1234 (number, optional) - {ARRAY} {INT} The IDs that represent the transaction reasons on which to filter.
     + dateFrom: `2017-02-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the transaction was created.
     + dateTo: `2017-02-01T00:00:00.123Z` (string, optional) - {DATETIME} The date and time in ISO-8601 format the transaction was created.
     + userIds: 1234 (number, optional) - {ARRAY} {INT} The User IDs in the Dude Security database that represent the userIds that performed the transaction
+    + workOrderDisplayIds: `1234` (array[string], optional) - The work order display ids in the Dude Unified database that represent the work order display ids associated with the transactions in the filtered collection.
 
 ### GET
 
@@ -492,6 +493,7 @@ Represents a type of inventory transaction - Adjustment, Movement, Receipt, and 
 + `transactionDateTime`: `2015-01-01T00:00:00.123Z` (string, required) - {DATETIME} The date and time in ISO-8601 format the transaction was performed.
 + `transactionUserId`: 123 (number, optional) - {INT} Id of the user who performed the transaction.
 + `notes`: `Some bolts were missing from the box.` (string, optional) - Notes about the transaction.
++ `workOrderDisplayId`: `1234` (string, optional) - Work order display id associated with the transaction.
 + `inventoryTransactionDetails` (array[Inventory Transaction Details], required) - The additional details associated with an adjustment type of transaction.
 
 ## Inventory Transaction Details (object)
