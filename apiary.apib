@@ -401,21 +401,6 @@ Represents the standard page, pagesize, etc. of the request when working against
 ## Base Client Object (object)
 + `id`: 1 (number, required) - {INT} The ID of the API client.
 
-
-## Inventory Item For Transaction (object)
-Represents an inventory item model used in a transaction, which adjusts which fields are required when posting a transaction.
-
-###Properties
-+ `id`: 1234567890 (number, required) - {INT} The ID for the object
-+ `name`: `P/N 234234A` (string, optional) - The unique name of the item as defined by customer
-+ `description`: `Rectifier Avalanche Diode` (string, optional) - Description of the item
-+ `isActive`: true (boolean, optional) - Indicates if the inventory item is active
-+ `manufacturerCount`: 1 (number, optional) - {INT} The number of manufacturers associated with the inventory item.
-+ `supplierCount`: 1 (number, optional) - {INT} The number of suppliers associated with the inventory item.
-+ `storageAreaCount`: 1 (number, optional) - {INT} The number of storage areas associated with the inventory item.
-+ `unitOfIssue`: foot (string, required) - The unit key of the unit of measure
-
-
 ## Inventory Item Data (object)
 Represents the inventory item data with all fields except the id which will be returned in the saved object
 
@@ -488,7 +473,7 @@ Represents a type of inventory transaction - Adjustment, Movement, Receipt, and 
 ## Inventory Transaction (object)
 
 ### Properties
-+ `inventoryItem` (Inventory Item For Transaction, required) - The inventory item associated with this transaction.
++ `inventoryItem` (Inventory Item Update, required) - The inventory item associated with this transaction.
 + `inventoryTransactionReason` (Inventory Transaction Reason, required) - The reason for this transaction.
 + `transactionDateTime`: `2015-01-01T00:00:00.123Z` (string, required) - {DATETIME} The date and time in ISO-8601 format the transaction was performed.
 + `transactionUserId`: 123 (number, optional) - {INT} Id of the user who performed the transaction.
